@@ -8,6 +8,7 @@ export class ServiciosService {
   private ingresar:boolean = false;
 
   constructor() { }
+  
 
   public ingresarAplicativo(obj:any):boolean{
     this.ingresar = obj.usuario == 'samvaldez' && obj.password == '1331';
