@@ -1,51 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ServiciosService } from '../servicios.service';
+import { UsuarioModel } from 'src/app/models/usuario.model';
+import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'mi-componente',
   templateUrl:'./mi-componente.component.html'
 })
 export class MiComponente implements OnInit {
+    usuario:UsuarioModel = new UsuarioModel();
+    recordarme=false;
 
-    public myForm!:FormGroup;
-
-    constructor(private fb:FormBuilder, private router:Router, private login:ServiciosService){}
+  
+    constructor(
+      private auth:AuthService,
+      private router:Router
+      ) { }
+  
+    ngOnInit() {
+      if(localStorage.getItem('email')){
+        this.usuario.email=''+localStorage.getItem('email');
+        this.recordarme=true;
     
-    ngOnInit(): void {
-
-        this.myForm = this.createMyForm();
-    }
-
-    private createMyForm():FormGroup{
-
-        return this.fb.group({
-            usuario:['',[Validators.required]],
-            password:['',Validators.required]
-        });
-    }   
-
-    public SubmitFormulario(){
-        
-        if(this.myForm.invalid){
-            
-            Object.values(this.myForm.controls).forEach(control => {
-                control.markAllAsTouched();
-            });
-
-            return;
-        }
-
-        if(!this.login.ingresarAplicativo(this.myForm.value)){
-            alert("Usuario o contrase;a invalidos")
-        }
-
-        alert("se envio");
+      }
     }
   
-    goToPage(pageName:string):void{
+    login(form: NgForm){
+      if(form.invalid){return};
+      // console.log(this.usuario)
+      // console.log(form)
+      Swal.fire({
+        allowOutsideClick:false,
+        icon:'info',
+        text:'Espere por favor',
+        showConfirmButton:false,
+      })
+      Swal.showLoading(Swal.getDenyButton());
   
-      this.router.navigate([`${pageName}`]);
+      this.auth.login(this.usuario)
+        .subscribe((resp: any)=>{
+          console.log(resp)
+          Swal.close();
+  
+          if(this.recordarme){
+            localStorage.setItem('email', this.usuario.email)
+          }
+          this.router.navigateByUrl('/planes')
+        },(err)=>{
+          console.log(err.error.error.message)
+          Swal.fire({
+            icon:'error',
+            title:'Error al Autentificar',
+            text:err.error.error.message
+          })
+        })
     }
-}
+  
+  }
+  

@@ -13,7 +13,7 @@ export class NavegadorComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.router.navigate(['/menu']);
+    
   }
 
 }
