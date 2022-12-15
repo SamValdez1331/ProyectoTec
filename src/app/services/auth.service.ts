@@ -7,8 +7,9 @@ import { UsuarioModel } from '../models/usuario.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private url='https://identitytoolkit.googleapis.com/v1/accounts:'
-  private apikey='AIzaSyCeTOf4G3K6UF4lh4_8ZOBiK9nFc00iYdk';
+  private url='https://proyectotec-614ef-default-rtdb.firebaseio.com/'
+  private apikey='AIzaSyBMRpxK31x4SoFu_dRIchDDWor4-0DCkXg'
+  ';
   userToken!:string;
   //crear nuevo usuario
   // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
