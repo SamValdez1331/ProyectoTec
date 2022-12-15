@@ -49,7 +49,7 @@ export class RegistroComponent implements OnInit {
       if(this.recordarme){
         localStorage.setItem('email', this.usuario.email)
       }
-      this.router.navigateByUrl('/misHacks')
+      this.router.navigateByUrl('/planes')
      },(err)=>{
       console.log(err.error.error.message)
       Swal.fire({
